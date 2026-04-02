@@ -41,22 +41,24 @@ const ProductList = () => {
     return (
         <div>
             <h2 className="text-center mb-4">Products</h2>
-            <div className="row g-1">
+            <div className="row g-2">
   {products.map(p => (
-    <div className="col-4 mb-4 gap-1" key={p.id}>
+    <div className="col-6 col-md-4 mb-2" key={p.id}>
       <div className="card h-100 shadow">
         <img
           src={`/images/${p.imageUrl}`}
-          className="card-img-top"
+          className="card-img-top mt-1"
           alt={p.name}
-          style={{ height: "150px",paddingTop:"10px" ,objectFit: "contain" }}
+          style={{ height: "120px", objectFit: "contain", padding: "5px"  }}
         />
         <div className="card-body text-center">
-          <h5 className="card-title">{p.name}</h5>
-          <p className="card-text">{p.description}</p>
-          <p className="fw-bold">₹{p.price}</p>
+          <h5 className="card-title" style={{ fontSize: "0.9rem" }}>{p.name}</h5>
+          <p className="card-text" style={{ fontSize: "0.8rem", height: "40px", overflow: "hidden" }}>
+            {p.description}
+          </p>
+          <p className="fw-bold" style={{ fontSize: "0.9rem" }}>₹{p.price}</p>
           <button
-            className="btn btn-primary"
+            className="btn btn-primary btn-sm"
             onClick={() => handleAddToCart(p.id)}
           >
             Add to Cart
