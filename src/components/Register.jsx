@@ -8,7 +8,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [nameError,setNameError]=useState("");
+  const [nameError, setNameError] = useState("");
   const navigate = useNavigate();
 
   const isValidEmail = (email) => {
@@ -19,30 +19,47 @@ const Register = () => {
     return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(password);
   };
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (nameError || emailError || passwordError) {
-    return; 
-  }
+    let valid = true;
 
-  if (!name.trim() || !email.trim() || !password.trim()) {
-    return;
-  }
+    if (!name.trim()) {
+      setNameError("Name cannot be empty");
+      valid = false;
+    }
 
-  try {
-    const user = await addUser({
-      name: name.trim(),
-      email: email.trim(),
-      password: password.trim()
-    });
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      valid = false;
+    } else if (!isValidEmail(email.trim())) {
+      setEmailError("Enter valid email (e.g. user@gmail.com)");
+      valid = false;
+    }
 
-    alert("Registration successfull ");
+    // Password validation
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      valid = false;
+    } else if (!isValidPassword(password.trim())) {
+      setPasswordError("Min 6 chars, include letters & numbers");
+      valid = false;
+    }
 
-    navigate("/login");
-  } catch (err) {
-    setEmailError("Registration failed. Try different email");
-  }
-};
+    if (!valid) return;
+
+    try {
+      await addUser({
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      });
+
+      alert("Registration successful");
+      navigate("/login");
+    } catch (err) {
+      setEmailError("Registration failed. Try different email");
+    }
+  };
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div
@@ -56,79 +73,79 @@ const Register = () => {
           <div className="mb-3">
             <label className="form-label text-start d-block">Name</label>
             <input
-  className={`form-control ${nameError ? "is-invalid" : ""}`}
-  placeholder="Enter your name"
-  value={name}
-  onChange={(e) => {
-    const value = e.target.value;
-    setName(value);
+              className={`form-control ${nameError ? "is-invalid" : ""}`}
+              placeholder="Enter your name"
+              value={name}
+              onChange={(e) => {
+                const value = e.target.value;
+                setName(value);
 
-    if (!value.trim()) {
-      setNameError("Name cannot be empty");
-    } else {
-      setNameError("");
-    }
-  }}
-/>
+                if (!value.trim()) {
+                  setNameError("Name cannot be empty");
+                } else {
+                  setNameError("");
+                }
+              }}
+            />
 
-{nameError && <div className="invalid-feedback">{nameError}</div>}
+            {nameError && <div className="invalid-feedback">{nameError}</div>}
           </div>
 
           <div className="mb-3">
             <label className="form-label text-start d-block">Email</label>
             <input
-  type="email"
-  className={`form-control ${emailError ? "is-invalid" : ""}`}
-  placeholder="Enter your email"
-  value={email}
-  onChange={(e) => {
-    const value = e.target.value;
-    setEmail(value);
+              type="email"
+              className={`form-control ${emailError ? "is-invalid" : ""}`}
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                const value = e.target.value;
+                setEmail(value);
+                if (!value.trim()) {
+                  setEmailError("Email is required");
+                } else if (!isValidEmail(value.trim())) {
+                  setEmailError("Enter valid email (e.g. user@gmail.com)");
+                } else {
+                  setEmailError("");
+                }
+              }}
+            />
 
-    if (!value.trim()) {
-      setEmailError("Email is required");
-    } else if (!isValidEmail(value.trim())) {
-      setEmailError("Enter valid email (e.g. user@gmail.com)");
-    } else {
-      setEmailError("");
-    }
-  }}
-/>
-
-{emailError && <div className="invalid-feedback">{emailError}</div>}
+            {emailError && <div className="invalid-feedback">{emailError}</div>}
           </div>
 
           <div className="mb-3">
             <label className="form-label text-start d-block">Password</label>
-           <input
-  type="password"
-  className={`form-control ${passwordError ? "is-invalid" : ""}`}
-  placeholder="Enter your password"
-  value={password}
-  onChange={(e) => {
-    const value = e.target.value;
-    setPassword(value);
+            <input
+              type="password"
+              className={`form-control ${passwordError ? "is-invalid" : ""}`}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => {
+                const value = e.target.value;
+                setPassword(value);
 
-    if (!value.trim()) {
-      setPasswordError("Password is required");
-    } else if (!isValidPassword(value.trim())) {
-      setPasswordError("Min 6 chars, include letters & numbers");
-    } else {
-      setPasswordError("");
-    }
-  }}
-/>
+                if (!value.trim()) {
+                  setPasswordError("Password is required");
+                } else if (!isValidPassword(value.trim())) {
+                  setPasswordError("Min 6 chars, include letters & numbers");
+                } else {
+                  setPasswordError("");
+                }
+              }}
+            />
 
-{passwordError && <div className="invalid-feedback">{passwordError}</div>}
-            
+            {passwordError && (
+              <div className="invalid-feedback">{passwordError}</div>
+            )}
           </div>
 
           <button
-  className="btn btn-success w-100"
-  disabled={nameError || emailError || passwordError}
->
-  Register
-</button>
+            className="btn btn-success w-100"
+            disabled={nameError || emailError || passwordError}
+          >
+            Register
+          </button>
 
           <p className="text-center mb-0">
             Already have an account? <a href="/login">Login</a>

@@ -8,14 +8,21 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error,setError]=useState("");
   const navigate=useNavigate();
+
+
 const handleLogin = async (e) => {
   e.preventDefault();
 
   const trimmedEmail = email.trim();
   const trimmedPassword = password.trim();
 
-  if (!trimmedEmail || !trimmedPassword) {
-    setError("Email and password are required");
+  if (!trimmedEmail) {
+    setError("Email is required");
+    return;
+  }
+
+  if (!trimmedPassword) {
+    setError("Password is required");
     return;
   }
 
@@ -23,7 +30,7 @@ const handleLogin = async (e) => {
     const token = await loginUser(trimmedEmail, trimmedPassword);
 
     localStorage.setItem("token", token);
-    setError(""); 
+    setError("");
     navigate("/");
   } catch (err) {
     setError("Invalid email or password");
@@ -48,8 +55,11 @@ const handleLogin = async (e) => {
             className="form-control"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            onChange={(e) =>{ setEmail(e.target.value) ;
+              setError("");
+            }}
+            
+
           />
         </div>
 
@@ -60,8 +70,10 @@ const handleLogin = async (e) => {
             className="form-control"
             placeholder="Enter your password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            onChange={(e) =>{setPassword(e.target.value);
+              setError("");
+            }}
+            
           />
            {error && (
   <p className="text-danger text-center">{error}</p>

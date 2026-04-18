@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://ecommerce-website-backend-production-6b23.up.railway.app";
+const BASE_URL = "http://localhost:8082";
 
 export const getAllProducts = () =>
   axios.get(`${BASE_URL}/products`).then((res) => res.data);
