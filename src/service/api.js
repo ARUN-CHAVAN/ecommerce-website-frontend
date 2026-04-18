@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8082";
+const BASE_URL = "https://ecommerce-website-backend-dj83.onrender.com";
 
 export const getAllProducts = () =>
   axios.get(`${BASE_URL}/products`).then((res) => res.data);
